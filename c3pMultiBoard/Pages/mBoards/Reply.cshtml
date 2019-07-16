@@ -1,0 +1,51 @@
+﻿@page
+@model c3pMultiBoard.Pages.mBoards.ReplyModel
+
+@{
+    ViewData["Title"] = DataModels.FrmTypeExtensions.ToFriendlyString(Model.frmType);
+
+    var mBoardForm = new DataModels.mBoardFrm();
+
+    mBoardForm.mBoard = Model.mBoard;
+    mBoardForm.ErrorMessage = string.Empty;
+    mBoardForm.FrmType = Model.frmType;
+    mBoardForm.ReturnUrl = Request.Query["path2"].ToString();
+}
+
+
+<h1>Reply</h1>
+
+<h4>mBoard - @DataModels.FrmTypeExtensions.ToFriendlyString(Model.frmType) 입니다.</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4"></div>
+    <div class="col-md-8">
+        @await Component.InvokeAsync("mBoardForm", mBoardForm)
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/lib/summernote/dist/summernote-lite.js"></script>
+    <script src="~/lib/summernote/dist/lang/summernote-ko-KR.js"></script>
+
+    
+    <script>
+        
+        var bEdit = false;
+        @if (Model.frmType == DataModels.FrmType.Modify)
+        {
+            @:bEdit = true;
+        }
+    </script>
+
+    <script src="~/js/mBoardForm.js"></script>
+
+}
+
+
+@section stylesheets {
+    @*summernote*@
+    <link href="~/lib/summernote/dist/summernote-lite.css" rel="stylesheet" />
+
+}

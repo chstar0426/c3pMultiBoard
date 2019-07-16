@@ -1,0 +1,42 @@
+﻿@page
+@model c3pMultiBoard.Pages.mBoards.DetailsModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+
+<table class="table">
+    <tr>
+        <td>@Html.DisplayNameFor(model => model.mBoard.Title)</td>
+        <td colspan="3">@Html.DisplayFor(model => model.mBoard.Title)</td>
+    </tr>
+    <tr>
+        <td>@Html.DisplayNameFor(model => model.mBoard.Name)</td>
+        <td>@Html.DisplayFor(model => model.mBoard.Name)</td>
+        <td>@Html.DisplayNameFor(model => model.mBoard.PosteDate)</td>
+        <td>@Html.DisplayFor(model => model.mBoard.PosteDate)</td>
+    </tr>
+    <tr>
+        <td>@Html.DisplayNameFor(model => model.mBoard.Category)</td>
+        <td>@Html.DisplayFor(model => model.mBoard.Category)</td>
+        <td>@Html.DisplayNameFor(model => model.mBoard.ReadCount)</td>
+        <td>@Html.DisplayFor(model => model.mBoard.ReadCount)</td>
+    </tr>
+    <tr>
+        <td colspan="4">@Html.Raw(Model.mBoard.Content)</td>
+    </tr>
+</table>
+
+
+
+<div class="btn-group" role="group" aria-label="Basic example">
+    
+    <a asp-page="./Reply" asp-route-id="@Model.mBoard.ID" asp-route-path="@(Request.Query["Path"].ToString())" asp-route-path2="@(Request.Query["Path2"].ToString())" class="btn btn-outline-primary">Reply</a>
+    <a asp-page="./Edit" asp-route-id="@Model.mBoard.ID" asp-route-path="@(Request.Query["Path2"].ToString())" class="btn btn-outline-info">Edit</a>
+    <a asp-page="./Delete" asp-route-id="@Model.mBoard.ID" asp-route-path="@(Request.Query["Path2"].ToString())" class="btn btn-outline-danger">Delete</a>
+    <a href='../mBoards@(Request.Query["Path2"].ToString())' class="btn btn-outline-secondary">목록</a>
+
+</div>

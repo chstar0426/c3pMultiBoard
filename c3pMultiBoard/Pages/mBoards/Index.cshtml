@@ -1,0 +1,137 @@
+﻿@page
+@model c3pMultiBoard.Pages.mBoards.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+
+<h1>Index</h1>
+
+
+@*검색상자*@
+<div class="row" style="margin-bottom:10px">
+    <div class="col-4">
+
+        <a asp-page="Create" asp-route-path="@HttpContext.Request.QueryString" class="btn btn-outline-danger">Create New</a>
+
+    </div>
+    <div class="col-4">
+
+
+    </div>
+    <div class="col-4 text-right">
+        @await Component.InvokeAsync("Searching", Model.searchingVar)
+    </div>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.mBoard[0].Title)
+
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.mBoard[0].Category)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.mBoard[0].Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.mBoard[0].PosteDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.mBoard[0].ReadCount)
+            </th>
+
+            <th></th>
+
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.mBoard)
+        {
+
+            <tr>
+                <td>
+                    @Html.Raw(UtilLibrary.BoardLibrary.FuncStep(item.Step))
+                    @UtilLibrary.StringLibrary.CutStringUnicode(item.Title, 20)
+                    @if (Model.searchingVar.SearchMode == false)
+                     {
+
+                        @if (item.ReplySubCount > 0 && item.Step == 0)
+                        {
+                            if (Request.Query["Id"] == item.ID.ToString())
+                            {
+
+                                @*<a asp-page="./Index">닫기</a>*@
+                                <a href="./mBoards@(String.IsNullOrEmpty(HttpContext.Request.Query["Page"].ToString()) ? "" : "?Page=" + HttpContext.Request.Query["Page"].ToString())">Cloase</a>
+
+                            }
+                            else
+                            {
+                                <a asp-page="./mBoards" asp-route-Id="@item.ID" asp-route-Page="@HttpContext.Request.Query["Page"].ToString()">하위목록</a>
+                                <a href="./mBoards?Id=@item.ID@(String.IsNullOrEmpty(HttpContext.Request.Query["Page"].ToString()) ? "" : "&Page=" + HttpContext.Request.Query["Page"].ToString())">Select</a>
+
+                            }
+                        }
+                    }
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Category)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @UtilLibrary.BoardLibrary.FuncShowTime(item.PosteDate)
+
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ReadCount)
+                </td>
+
+                <td>
+
+                    @{
+                        string pn = "?Id=" + item.Ref + (String.IsNullOrEmpty(@HttpContext.Request.QueryString.Value) ? "" : (
+                            (String.IsNullOrEmpty(HttpContext.Request.Query["Page"].ToString()) ? "" : "&Page=" + HttpContext.Request.Query["Page"].ToString())
+                            + (String.IsNullOrEmpty(HttpContext.Request.Query["SearchField"].ToString()) ? "" : "&SearchField=" + HttpContext.Request.Query["SearchField"].ToString())
+                            + (String.IsNullOrEmpty(HttpContext.Request.Query["SearchQuery"].ToString()) ? "" : "&SearchQuery=" + HttpContext.Request.Query["SearchQuery"].ToString())));
+
+                    }
+                    <a asp-page="./Reply" asp-route-id="@item.ID" asp-route-path="@pn" asp-route-path2="@HttpContext.Request.QueryString">Reply</a> |
+                    <a asp-page="./Edit" asp-route-id="@item.ID" asp-route-path="@HttpContext.Request.QueryString">Edit</a> |
+                    <a asp-page="./Details" asp-route-id="@item.ID" asp-route-path="@pn" asp-route-path2="@HttpContext.Request.QueryString">Details</a> |
+                    <a asp-page="./Delete" asp-route-id="@item.ID" asp-route-path="@HttpContext.Request.QueryString">Delete</a>
+                </td>
+                <td>@item.ID  / @item.Ref / @item.Step /  @item.RefOrder | @item.ReplySubCount</td>
+            </tr>
+
+        }
+    </tbody>
+</table>
+
+<hr />
+
+<div class="text-center">
+    <paging4 url="@HttpContext.Request.Path"
+             page-index="@Model.PageIndex"
+             page-size=5
+             page-etc='@(String.IsNullOrEmpty(HttpContext.Request.Query["Id"].ToString()) ? "" :"Id=" + HttpContext.Request.Query["Id"].ToString())'
+             record-count=@Model.TotalCount
+             page-counter=5
+             search-mode='@Model.searchingVar.SearchMode'
+             search-field='@Model.searchingVar.SearchField'
+             search-query='@Model.searchingVar.SearchQuery'>
+    </paging4>
+</div>
+
+
+@section stylesheets {
+    @*font-awasome 설정 cdn*@
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+}
+

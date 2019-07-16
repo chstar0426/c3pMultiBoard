@@ -1,0 +1,61 @@
+﻿@model DataModels.mBoardFrm
+
+    <form method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        @if (Model.FrmType == DataModels.FrmType.Modify)
+        {
+            <input type="hidden" asp-for="mBoard.ID" />
+        }
+
+        <div class="form-group">
+            <label asp-for="mBoard.WriterID" class="control-label"></label>
+            <input asp-for="mBoard.WriterID" class="form-control" value="guest" />
+            <span asp-validation-for="mBoard.WriterID" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="mBoard.Name" class="control-label"></label>
+            <input asp-for="mBoard.Name" class="form-control" />
+            <span asp-validation-for="mBoard.Name" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="mBoard.Password" class="control-label"></label>
+            <input asp-for="mBoard.Password" class="form-control" />
+            <span asp-validation-for="mBoard.Password" class="text-danger"></span>
+        </div>
+
+
+
+        <div class="form-group">
+            <label asp-for="mBoard.Title" class="control-label"></label>
+            <input asp-for="mBoard.Title" class="form-control" />
+            <span asp-validation-for="mBoard.Title" class="text-danger"></span>
+        </div>
+
+        <div id="summernote" name="summernote"></div>
+        <textarea asp-for="mBoard.Content" rows="3" cols="40" style="display:none;"></textarea>
+
+        <div class="form-group">
+            <label asp-for="mBoard.Category" class="control-label"></label>
+            <select asp-for="mBoard.Category" class="form-control"
+                    asp-items="@Html.GetEnumSelectList(typeof(DataModels.Category))"></select>
+            <span asp-validation-for="mBoard.Category" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="mBoard.Encoing" class="control-label"></label>
+            <select asp-for="mBoard.Encoing" class="form-control"
+                    asp-items="@Html.GetEnumSelectList(typeof(DataModels.Encoding))"></select>
+            <span asp-validation-for="mBoard.Encoing" class="text-danger"></span>
+        </div>
+
+        <hr />
+
+        <div class="btn-group" role="group" aria-label="Basic example">
+            <input type="submit" value="저장" class="btn btn-outline-danger"  id="btnSave" />
+            <a href='../mBoards@(Model.ReturnUrl)' class="btn btn-outline-secondary">목록</a>
+        </div>
+
+
+    </form>
